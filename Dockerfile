@@ -19,7 +19,8 @@ RUN apt-get install -y \
     cron \
     rsyslog \
     python \
-    imagemagick
+    imagemagick \
+    locales
 
 RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-png-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install intl bcmath gd mysqli mbstring zip exif opcache pdo_mysql json
@@ -43,6 +44,14 @@ RUN pecl install -o -f redis \
 RUN curl -sL https://deb.nodesource.com/setup_9.x | bash - \
     && apt-get update \
     && apt-get install nodejs
+
+# Set the locale
+RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
+    && sed -i -e 's/# fr_FR.UTF-8 UTF-8/fr_FR.UTF-8 UTF-8/' /etc/locale.gen \
+    && locale-gen
+ENV LANG fr_FR.UTF-8
+ENV LANGUAGE fr_FR:fr
+ENV LC_ALL fr_FR.UTF-8
 
 # Cleanup
 RUN apt-get clean \
