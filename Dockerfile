@@ -13,6 +13,7 @@ RUN apt-get update \
         libpng-dev \
         libmcrypt-dev \
         gnupg \
+        vim \
         cron \
         imagemagick \
         locales \
@@ -58,7 +59,11 @@ COPY conf/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod 0777 /usr/local/bin/entrypoint.sh
 
 # Cron
+RUN touch /var/log/cron.log
 COPY conf/crontab /etc/cron.d/app
+RUN chmod 0644 -R /etc/cron.d/
+RUN chmod +x -R /etc/cron.d/
+RUN crontab -u www-data /etc/cron.d/app
 
 EXPOSE 9000
 EXPOSE 8000
