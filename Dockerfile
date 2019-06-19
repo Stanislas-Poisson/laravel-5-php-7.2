@@ -24,6 +24,7 @@ RUN apt-get update \
 RUN curl -sL https://deb.nodesource.com/setup_9.x | bash - \
     && apt-get update \
     && apt-get install -y nodejs \
+    && npm install --global --save-exact prettier \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
