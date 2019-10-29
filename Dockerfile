@@ -18,26 +18,38 @@ RUN apt-get update \
         imagemagick \
         locales \
         unzip \
+        git \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN curl -sL https://deb.nodesource.com/setup_9.x | bash - \
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - \
     && apt-get update \
-    && apt-get install -y nodejs npm \
+    && apt-get install -y nodejs \
     && npm install --global --save-exact yarn \
     && npm install --global --save-exact prettier \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-png-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-    && docker-php-ext-install intl bcmath gd mysqli mbstring zip exif opcache pdo_mysql json
+    && docker-php-ext-install \
+        intl \
+        bcmath \
+        gd \
+        mysqli \
+        mbstring \
+        zip \
+        exif \
+        opcache \
+        pdo_mysql \
+        json \
+        pcntl
 
 # Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --filename=composer --install-dir=/usr/local/bin
 
 # Xdebug
-RUN pecl install -o -f xdebug-2.6.1 \
-    && pecl install -o -f redis-4.0.1 \
+RUN pecl install -o -f xdebug-2.7.2 \
+    && pecl install -o -f redis-5.0.5 \
     && docker-php-ext-enable redis \
     && rm -rf /tmp/pear
 
