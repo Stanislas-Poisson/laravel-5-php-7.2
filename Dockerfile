@@ -45,7 +45,8 @@ RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-png-dir
         pcntl
 
 # Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --filename=composer --install-dir=/usr/local/bin
+RUN curl -sS https://getcomposer.org/installer | php -- --filename=composer --install-dir=/usr/local/bin \
+    composer global require hirak/prestissimo
 
 # Xdebug
 RUN pecl install -o -f xdebug-2.7.2 \
