@@ -19,6 +19,7 @@ RUN apt-get update \
         locales \
         unzip \
         git \
+        supervisor \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -72,6 +73,7 @@ COPY conf/php.ini /usr/local/etc/php/php.ini
 COPY conf/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 COPY conf/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod 0777 /usr/local/bin/entrypoint.sh
+COPY conf/supervisord.conf /etc/supervisord.conf
 
 # Cron
 RUN touch /var/log/cron.log
@@ -87,5 +89,4 @@ EXPOSE 3001
 WORKDIR /var/www/html
 
 VOLUME ["/var/www/html"]
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
-CMD ["php-fpm"]
+CMD ["supervisord", "--nodaemon", "--configuration", "/etc/supervisord.conf"]
